@@ -10,6 +10,10 @@ variable "amazon-linux2-ami" {
   
 }
 
+variable "ubuntu-ami" {
+  
+}
+
 variable "t2micro-instance-type" {
   
 }
