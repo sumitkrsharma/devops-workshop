@@ -89,7 +89,7 @@ resource "aws_instance" "demo-instance" {
 #    security_groups = [ "demo-sg" ]
     subnet_id = aws_subnet.demo-public-subnet-01.id
     
-    for_each = toset(["jenkins-master" "build-slave", "ansible"])
+    for_each = toset(["jenkins-master", "build-slave", "ansible"])
     
     tags = {
       Name = "${each.key}"
