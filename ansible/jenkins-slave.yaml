@@ -1,5 +1,5 @@
 ---
-- hosts: jenkins-slave
+- hosts: build
   become: true
   tasks:
   - name: update ubuntu repo and cache
