@@ -114,14 +114,14 @@ resource "aws_instance" "demo-instance" {
     
     for_each = var.instances
 
-    instance_type = each.value.instace_type
+    instance_type = each.value.instance_type
 
     root_block_device {
-      volume_size = each.value.root_block_device
+      volume_size = each.value.root_block_size
       volume_type = "gp2"
     }
     
     tags = {
       Name = "${each.key}"
-    }''
+    }
 }
