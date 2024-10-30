@@ -20,3 +20,56 @@
       src: /opt/apache-maven-3.9.9-bin.tar.gz
       dest: /opt
       remote_src: yes
+
+  - name: Install required dependencies for docker
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+
+  - name: Add docker GPG key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+  - name: Add Docker repo
+    apt_repository:
+      repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+      state: present
+  - name: Install Docker package
+    apt:
+      name: docker-ce
+      state: present
+      update_cache: yes
+  - name: Add user to docker group
+    user:
+      name: ubuntu
+      groups: docker
+      append: yes
+  - name: Ensure docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
+  - name: change permission for docker.sock
+    file:
+      path: /var/run/docker.sock
+      owner: root
+      group: docker
+      mode: '0660'
+  - name: Apply new group membership
+    shell: newgrp docker && docker ps
+    register: docker_access
+    changed_when: false
+
+  - name: Print docker access result
+    debug:
+      msg: "Docker access verification: {{ docker_access.stdout }}"
+
+  - name: Restart docker service to apply changes
+    service:
+      name: docker
+      state: restarted
