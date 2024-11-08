@@ -73,30 +73,3 @@
     service:
       name: docker
       state: restarted
-
-  - name: Pull Sonarqube Docker image
-    docker_image:
-      name: sonarqube
-      source: pull
-  - name: Run Sonarqube container
-    docker_container:
-      name: sonarqube
-      image: sonarqube
-      ports:
-        - "9090:9090"
-      state: started
-  - name: Wait for sonarqube to start
-    wait_for:
-      host: localhost
-      port: 9000
-      delay: 30
-      timeout: 300
-      state: started
-  - name: Validation sonarqube container installation
-    uri:
-      url: http://localhost:9000/
-      status_code: 200
-    register: sonarqube_status
-  - name: Display Sonarqube container validation result
-    debug:
-      msg: "Sonarqube is {{ sonarqube_status.status }}"
