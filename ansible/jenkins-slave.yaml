@@ -59,9 +59,9 @@
       path: /var/run/docker.sock
       owner: root
       group: docker
-      mode: '0660'
-  - name: Apply new group membership
-    shell: newgrp docker && docker ps
+      mode: '0777'
+  - name: Check Docker access
+    shell: docker ps
     register: docker_access
     changed_when: false
 
